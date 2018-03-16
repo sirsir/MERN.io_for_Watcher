@@ -3,6 +3,10 @@ import cuid from 'cuid';
 import slug from 'limax';
 import sanitizeHtml from 'sanitize-html';
 
+import React from 'react';
+import { render, renderToString } from 'react-dom/server';
+// import Activity from '../../client/modules/Activity/Activity';
+
 var userActivityFn = {
   requestPara2Objects: function(strIn){
     let objOut = {}
@@ -28,8 +32,8 @@ var userActivityFn = {
       }
 
       switch(true) {
-        case /^#LoginName/.test(line):
-            objOut["login"] = line.replace(/^#LoginName/,"")
+        case /^#LoginName=/.test(line):
+            objOut["login"] = line.replace(/^#LoginName=*/,"")
 
             // user = User.select(:id).where({login: mapped_result[:login]}).first
             // unless user.nil?
@@ -37,8 +41,8 @@ var userActivityFn = {
             // end
           
             break;
-        case /^#MacAddress/.test(line):
-            objOut["mac_addr"] = line.replace(/^#MacAddress/,"")
+        case /^#MacAddress=/.test(line):
+            objOut["mac_addr"] = line.replace(/^#MacAddress=*/,"")
             break;
         case /^__AGENT_ACTIVITY__/.test(line):
             flag_act = true
@@ -96,6 +100,48 @@ var userActivityFn = {
 
   }
 }
+
+// export function show(req, res) {
+//   UserActivity.find().exec((err, items) => {
+//     if (err) {
+//       res.status(500).send(err);
+//     }
+//     // res.json({ items });
+
+//     // const appString = renderToString(<Activity/>);
+
+//     const appString = renderToString(<Activity {...items} />);
+
+//     // res
+//     //   .set('Content-Type', 'text/html')
+//     //   .status(200)
+//     //   .end(appString);
+
+//     res.render(render(<Activity {...items} />))
+
+//     // res.render('index.js', {
+//     //   react: appString
+//     // })
+
+//     // res
+//     //   .set('Content-Type', 'text/html')
+//     //   .status(200)
+//     //   .end(renderFullPage(initialView, finalState));
+
+//     // res.send(Activity({
+//     //   body: appString,
+//     //   title: 'Hello World from the server'
+//     // }));
+
+//     // res.send(Activity({
+//     //   body: 'xxss',
+//     //   title: 'Hello World from the server'
+//     // }));
+
+    
+
+//   });
+// }
 
 /**
  * Get all posts

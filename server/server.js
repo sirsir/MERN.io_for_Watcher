@@ -41,6 +41,8 @@ import userActivity from './routes/userActivity.routes';
 import dummyData from './dummyData';
 import serverConfig from './config';
 
+// import activity from './routes/Activity.routes';
+
 // Set native promises as mongoose promise
 mongoose.Promise = global.Promise;
 
@@ -61,6 +63,7 @@ app.use(bodyParser.json({ limit: '20mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
 app.use(Express.static(path.resolve(__dirname, '../dist/client')));
 app.use('/api', posts);
+// app.use('/activity', activity);
 app.use('/api', userActivity);
 
 // Render Initial HTML
@@ -111,6 +114,7 @@ const renderError = err => {
 // Server Side Rendering based on routes matched by React-router.
 app.use((req, res, next) => {
   match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
+    
     if (err) {
       return res.status(500).end(renderError(err));
     }
@@ -127,6 +131,7 @@ app.use((req, res, next) => {
 
     return fetchComponentData(store, renderProps.components, renderProps.params)
       .then(() => {
+
         const initialView = renderToString(
           <Provider store={store}>
             <IntlWrapper>
