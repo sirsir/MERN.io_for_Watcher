@@ -1,21 +1,4 @@
-// // Import Actions
-// import {  } from './ActivityActions';
-
-// // Initial State
-// const initialState = {};
-
-// const ActivityReducer = (state = initialState, action) => {
-//   switch (action.type) {
-//     default:
-//       return state;
-//   }
-// };
-
-// export default ActivityReducer;
-
-
-
-import { ADD_ACTIVITY, ADD_ACTIVITIES, DELETE_ACTIVITY } from './ActivityActions';
+import { ADD_ACTIVITY, ADD_ACTIVITIES, DELETE_ACTIVITY} from './ActivityActions';
 
 // Initial State
 const initialState = { data: [] };

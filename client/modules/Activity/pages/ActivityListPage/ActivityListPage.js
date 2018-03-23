@@ -5,19 +5,35 @@ import { connect } from 'react-redux';
 // import PostList from '../../components/PostList';
 // import PostCreateWidget from '../../components/PostCreateWidget/PostCreateWidget';
 
-import ActivityList from '../../components/ActivityListItem';
+import styles from './ActivityListPage.css'
+
+import ActivityListItem from '../../components/ActivityListItem';
+import ActivitySummaryListItem from '../../components/ActivitySummaryListItem';
+
+import ActivityListUser from '../..//components/ActivityListUser';
 
 // Import Actions
-import {  fetchActivities } from '../../ActivityActions';
+import {  fetchActivities} from '../../ActivityActions';
+import {  fetchUsers } from '../../../Users/UsersActions';
+
+import { changeActivityView, changeSelectUser, changeSelectStartDate, changeSelectEndDate } from '../../../App/AppActions';
+
+
 // import { toggleAddPost } from '../../../App/AppActions';
 
 // Import Selectors
 // import { getShowAddPost } from '../../../App/AppReducer';
 import { getActivities } from '../../ActivityReducer';
+import { getUsers } from '../../../Users/UsersReducer';
+import { getActivityView, getSelectUser, getSelectStartDate, getSelectEndDate } from '../../../App/AppReducer';
+
+import { DateRange  } from 'react-date-range';
+
 
 class ActivityListPage extends Component {
   componentDidMount() {
     this.props.dispatch(fetchActivities());
+    this.props.dispatch(fetchUsers());
   }
 
   // handleDeletePost = post => {
@@ -26,15 +42,75 @@ class ActivityListPage extends Component {
   //   }
   // };
 
+  handleChangeActivityView = mode => {
+    
+      this.props.dispatch(changeActivityView(mode));
+    
+  };
+
+  handleChangeSelectUser = e => {
+      let user = e.target.value;
+      this.props.dispatch(changeSelectUser(user));
+    
+  };
+
+  handleClickSearch = e => {
+      // let user = e.target.value;
+      this.props.dispatch(fetchActivities(this.props.selectUser,this.props.selectStartDate,this.props.selectEndDate));
+    
+  };
+
+  handleSelectDateRange = range => {
+    // console.log(range);
+    // console.log(range.startDate.format())
+
+    // let newStartDate = range.startDate.format()
+
+    // this.props.dispatch(changeSelectStartDate("xxx"))
+
+    // this.props.dispatch(changeSelectStartDate(newStartDate))
+
+    this.props.dispatch(changeSelectStartDate(range.startDate.format('YYYY-MM-DD 00:00:00')))
+    this.props.dispatch(changeSelectEndDate(range.endDate.format('YYYY-MM-DD 23:59:59')))
+  };
+
+
+
   // handleAddPost = (name, title, content) => {
   //   this.props.dispatch(toggleAddPost());
   //   this.props.dispatch(addPostRequest({ name, title, content }));
   // };
 
+  // <a className={styles['add-post-button']} href="#" onClick={props.toggleAddPost}><FormattedMessage id="addPost" /></a>
+  // <a className={styles['add-post-button']} href="#" onClick={this.handleChangeActivityView("summary")}>Summary</a>     
+
   render() {
+    // console.log(this.props)
+    let activities = this.props.activityView==="summary"?
+      <ActivitySummaryListItem items={this.props.activities} />
+      :
+      <ActivityListItem items={this.props.activities} />
+    
+
     return (
-      <div>        
-        <ActivityList items={this.props.activities} />
+      <div>
+        <ActivityListUser users={this.props.users} handleChangeSelectUser={this.handleChangeSelectUser}/>
+        <DateRange 
+          onChange={e=>{this.handleSelectDateRange(e)}}
+        />
+        <a className={styles['add-post-button']} href="#" onClick={(e)=>this.handleClickSearch(e)}>Search</a>     
+        <br/>
+        <br/>
+          {
+            this.props.activityView === 'normal'?
+              <a className={styles['add-post-button']} href="#" onClick={(e)=>this.handleChangeActivityView("summary")}>Summary</a>
+              :
+              <a className={styles['add-post-button']} href="#" onClick={(e)=>this.handleChangeActivityView("normal")}>Raw Data</a>     
+          }
+                     
+          {activities}
+
+        
       </div>
     );
   }
@@ -51,12 +127,18 @@ class ActivityListPage extends Component {
 
 // Actions required to provide data for this component to render in sever side.
 ActivityListPage.need = [() => { return fetchActivities(); }];
+ActivityListPage.need = [() => { return fetchUsers(); }];
 
 // Retrieve data from store as props
 function mapStateToProps(state) {
   return {
     // showAddActivity: getShowAddActivity(state),
     activities: getActivities(state),
+    users: getUsers(state),
+    activityView: getActivityView(state),
+    selectUser: getSelectUser(state),
+    selectStartDate: getSelectStartDate(state),
+    selectEndDate: getSelectEndDate(state),
   };
 }
 

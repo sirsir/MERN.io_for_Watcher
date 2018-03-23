@@ -64,12 +64,14 @@ const Activity= (props) => {
   // Activities = 
 
 
-  if (!props.items)
+  if (!props.users)
     return null;
 
-  let activities = props.items
+  let users = ["all users",...props.users]
+  // console.log("dddd")
+  // console.log(users)
   
-  if (activities.length === 0 )
+  if (users.length === 0 )
     return null;
 
   // xxxxx
@@ -78,33 +80,53 @@ const Activity= (props) => {
   //     }
   //     yyy
 
-  return (
-    <div>
+  // const createUserSelect = (user,idx) => <option
+  //     key={idx}
+  //     value={user}
+  //   >
+  //   {user}
+  //   </option>
       
 
-      {
-        
+  return (
+    <div>      
+      <select
+          onChange={e => {props.handleChangeSelectUser(e)}}
+        >
+          {users.map((user,idx) => <option
+            key={idx}
+            value={user}
+          >
+          {user}
+          </option>
 
-        Object.keys(activities).map(
-          (key,idx)=>{
-            if (!activities[key])
-              return null;
-            // console.log(activities[key].login)
-            return (
-              <ActivityItem key={idx} item={activities[key]}>
-              </ActivityItem>
-            )
-          }
-        )
-      }
-
-      {
-
-      }
+            )}
+        </select>
     
     </div>
   )
 }
+
+
+      // <ul>
+      // {
+
+      //   users.map(
+      //     (user,idx) => (
+      //       <li key={idx}>
+      //         {user}
+      //       </li>
+      //     )          
+      //   )
+      // }
+      // </ul>
+
+// <select
+//           onChange={event => this.setState({ value: event.target.value })}
+//           value={this.state.value}
+//         >
+//           {this.state.options.map(createItem)}
+//         </select>
 
 // Activity.propTypes = {
 //   Activity: PropTypes.shape({

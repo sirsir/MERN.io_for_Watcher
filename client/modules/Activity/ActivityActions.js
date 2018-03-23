@@ -37,16 +37,55 @@ export function addActivities(activities) {
   };
 }
 
-export function fetchActivities() {
+
+
+export function fetchActivities(user,startDate,endDate) {
   return (dispatch) => {
     // return callApi('activities').then(res => {
-    return callApi('user_activity').then(res => {
-      console.log("ddddwwiikk")
-      console.log(res)
+      // let body = {}
+
+      // if (user)
+      //   body = {...body, user}
+
+      // if (startDate)
+      //   body = {...body, startDate}
+      // if (endDate)
+      //   body = {...body, endDate}
+
+      let apiUrl = 'user_activity'
+
+      if (typeof(user)!=='undefined'||typeof(startDate)!=='undefined'||typeof(endDate)!=='undefined'){
+        apiUrl += '?'
+
+        // if (typeof(user)!=='undefined'){
+        //   apiUrl += 'login='+user +'&'
+        // }
+
+        if (typeof(user)!=='undefined'){
+          apiUrl += 'alias='+user +'&'
+        }
+
+        if (typeof(startDate)!=='undefined'){
+          apiUrl += 'startDate='+startDate +'&'
+        }
+
+        if (typeof(endDate)!=='undefined'){
+          apiUrl += 'endDate='+endDate
+        }
+
+        apiUrl = apiUrl.replace(/\?$/, '')
+      }
+      
+
+    // return callApi('user_activity', 'get', body).then(res => {
+    return callApi(apiUrl).then(res => {
+      // console.log("ddddwwiikk")
+      // console.log(res)
       dispatch(addActivities(res.activities));
     });
   };
 }
+
 
 export function fetchActivity(cuid) {
   return (dispatch) => {

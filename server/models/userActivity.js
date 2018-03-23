@@ -11,6 +11,7 @@ const userActivitySchema = new Schema({
   remote_ip: { type: 'String', required: false },
   mac_addr: { type: 'String', required: true },
   proc_exec_name: { type: 'String', required: false },
+  alias: { type: 'String', required: false },
 });
 
 export default mongoose.model('UserActivity', userActivitySchema);

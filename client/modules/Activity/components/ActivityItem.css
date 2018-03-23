@@ -7,7 +7,8 @@
 
 .activity_item {
   display: inline-block;
-  padding-bottom: 2em;
+  padding-bottom: 1em;  
+  width: 100%;
 }
 
 /*.activity_item:nth-child(2n+0) {
@@ -18,27 +19,38 @@
 
 .activity_item :nth-child(5n+0) {
     background: #fdfd96;
+    width: 15%;
+    vertical-align: middle;
 }
 
 .activity_item :nth-child(5n+1) {
     background: #ff6961;
+    width: 15%;
+    vertical-align: middle;
 }
 
 .activity_item :nth-child(5n+2) {
     background: #aec6cf;
+    /*width: 20%;*/
+    vertical-align: middle;
 }
 
 .activity_item :nth-child(5n+3) {
     background: #ffd1dc;
+    /*width: 20%;*/
+    vertical-align: middle;
 }
 
 .activity_item :nth-child(5n+4) {
     background: #77dd77;
+    /*width: 20%;*/
+    vertical-align: middle;
 }
 
 .activity_item *{
   display: inline-block;
-  padding-right: 2em;
+  padding: 0px 2em 0px 2em;
+  margin: 0em 1px 2px 1px;
 }
 
 .proc_name {

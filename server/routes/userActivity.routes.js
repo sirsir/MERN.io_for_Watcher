@@ -5,6 +5,7 @@ const router = new Router();
 // Get all Posts
 // router.route('/posts').get(PostController.getPosts);
 router.route('/user_activity').get(UserActivityController.getActivity);
+// router.route('/user_activity/field').get(UserActivityController.getField);
 router.route('/user_activity').post(UserActivityController.addActivity);
 
 // Get one post by cuid
