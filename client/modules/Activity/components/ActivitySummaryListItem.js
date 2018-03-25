@@ -7,6 +7,8 @@ import ActivityItem from './ActivityItem';
 // Import Style
 import styles from './ActivityListItem.css';
 
+import ReactTable from 'react-table'
+
 // import stylesBootstrap from '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 // import stylesBootstrap from 'bootstrap/dist/css/bootstrap.css';
 
@@ -22,8 +24,8 @@ const fn_ActivitySummaryListItem = {
 
     let strOut = result.split(":").map(
       (strNum,idx) => {
-        if (strNum==="00")
-          return 0
+        // if (strNum==="00")
+        //   return 0
 
         switch (idx){
           case 0:
@@ -139,37 +141,61 @@ const Activity= (props) => {
 
   activities = summarize(activities)
 
-  console.log(activities)
+  // console.log(activities)
 
-  // xxxxx
-  //     {
-  //       JSON.stringify(activities)
-  //     }
-  //     yyy
+  const data = Object.values(activities)
+ 
+  // const columns = [{
+  //   Header: 'Process Name',
+  //   accessor: 'proc_name' // String-based value accessors!
+  // }, {
+  //   Header: 'Age',
+  //   accessor: 'age',
+  //   Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+  // }, {
+  //   id: 'friendName', // Required because our accessor is not a string
+  //   Header: 'Friend Name',
+  //   accessor: d => d.friend.name // Custom value accessors!
+  // }, {
+  //   Header: props => <span>Friend Age</span>, // Custom header components!
+  //   accessor: 'friend.age'
+  // }]
+  const columns = [{
+    Header: 'Computer',
+    accessor: 'alias' // String-based value accessors!
+  },
+  {
+    Header: 'Process Name',
+    accessor: 'proc_name' // String-based value accessors!
+  }, 
+  {
+    Header: 'Window Title',
+    accessor: 'window_title' // String-based value accessors!
+  }, 
+  {
+    Header: 'Total Duration',
+    accessor: 'duration' // String-based value accessors!
+  }
+  ]
+
+  // const activitiesRender = Object.keys(activities).map(
+  //         (key,idx)=>{
+  //           if (!activities[key])
+  //             return null;
+  //           console.log(activities[key].login)
+  //           return (
+  //             <ActivityItem key={idx} item={activities[key]}>
+  //             </ActivityItem>
+  //           )
+  //         }
+  //       )
 
   return (
-    <div>
-      
-
-      {
-        
-
-        Object.keys(activities).map(
-          (key,idx)=>{
-            if (!activities[key])
-              return null;
-            console.log(activities[key].login)
-            return (
-              <ActivityItem key={idx} item={activities[key]}>
-              </ActivityItem>
-            )
-          }
-        )
-      }
-
-      {
-
-      }
+    <div className={styles.container}>
+      <ReactTable
+        data={data}
+        columns={columns}
+      />
     
     </div>
   )

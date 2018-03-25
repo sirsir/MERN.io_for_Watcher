@@ -32,7 +32,7 @@ import { DateRange  } from 'react-date-range';
 
 class ActivityListPage extends Component {
   componentDidMount() {
-    this.props.dispatch(fetchActivities());
+    // this.props.dispatch(fetchActivities());
     this.props.dispatch(fetchUsers());
   }
 
@@ -98,19 +98,23 @@ class ActivityListPage extends Component {
         <DateRange 
           onChange={e=>{this.handleSelectDateRange(e)}}
         />
-        <a className={styles['add-post-button']} href="#" onClick={(e)=>this.handleClickSearch(e)}>Search</a>     
+        <button className='btn btn-primary btn-block' onClick={(e)=>this.handleClickSearch(e)}>
+          Load <i className='fa fa-search'/>
+        </button>
+        
         <br/>
         <br/>
           {
             this.props.activityView === 'normal'?
-              <a className={styles['add-post-button']} href="#" onClick={(e)=>this.handleChangeActivityView("summary")}>Summary</a>
+              <button className='btn btn-success' onClick={(e)=>this.handleChangeActivityView("summary")}>
+                Summary <i className='fa fa-list-alt'/>
+              </button>
               :
-              <a className={styles['add-post-button']} href="#" onClick={(e)=>this.handleChangeActivityView("normal")}>Raw Data</a>     
-          }
-                     
-          {activities}
-
-        
+              <button className='btn btn-info' onClick={(e)=>this.handleChangeActivityView("normal")}>
+                Raw Data <i className='fa fa-chevron-circle-down'/>
+              </button>               
+          }                     
+          {activities}        
       </div>
     );
   }
@@ -126,7 +130,7 @@ class ActivityListPage extends Component {
 }
 
 // Actions required to provide data for this component to render in sever side.
-ActivityListPage.need = [() => { return fetchActivities(); }];
+// ActivityListPage.need = [() => { return fetchActivities(); }];
 ActivityListPage.need = [() => { return fetchUsers(); }];
 
 // Retrieve data from store as props

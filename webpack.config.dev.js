@@ -36,6 +36,11 @@ module.exports = {
 
   module: {
     loaders: [
+
+      {
+        test: /react-table\.css$/,
+        loader: ['style-loader', 'css-loader'],
+      },
       {
         test: /\.css$/,
         exclude: /node_modules/,
