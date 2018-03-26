@@ -316,7 +316,8 @@ export function getDistinct(req, res) {
         userActivityFn.mapping_Mac_Alias = userActivityFn.get_MAC_ALIAS_MAPPING()
       }
 
-      let arrOut = Object.values( userActivityFn.mapping_Mac_Alias )
+      // let arrOut = Object.values( userActivityFn.mapping_Mac_Alias )
+      let arrOut = Object.keys(userActivityFn.mapping_Mac_Alias).map((key) => userActivityFn.mapping_Mac_Alias[key] )
 
       res.json({ users: arrOut });
 

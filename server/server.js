@@ -62,6 +62,7 @@ app.use(compression());
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
 app.use(Express.static(path.resolve(__dirname, '../dist/client')));
+app.use(Express.static(path.resolve(__dirname, '../client/assets')));
 app.use('/api', posts);
 // app.use('/activity', activity);
 app.use('/api', userActivity);
@@ -92,8 +93,8 @@ const renderFullPage = (html, initialState) => {
 
         <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'/>
         <link rel="shortcut icon" href="http://res.cloudinary.com/hashnode/image/upload/v1455629445/static_imgs/mern/mern-favicon-circle-fill.png" type="image/png" />
-        <link rel="stylesheet" href="bootstrap4.0.0/bootstrap.min.css">
-        <link rel="stylesheet" href="font-awesome4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/bootstrap4.0.0/bootstrap.min.css">
+        <link rel="stylesheet" href="/font-awesome4.7.0/css/font-awesome.min.css">
         
         <link rel='stylesheet' href='react-table.css' />
       </head>

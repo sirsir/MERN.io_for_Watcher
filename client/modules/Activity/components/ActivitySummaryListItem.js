@@ -143,7 +143,8 @@ const Activity= (props) => {
 
   // console.log(activities)
 
-  const data = Object.values(activities)
+  // const data = Object.values(activities)
+  const data = Object.keys(activities).map((key) => activities[key] )
  
   // const columns = [{
   //   Header: 'Process Name',
