@@ -29,7 +29,7 @@ export default (
     <IndexRoute
       getComponent={(nextState, cb) => {
         require.ensure([], require => {
-          cb(null, require('./modules/Post/pages/PostListPage/PostListPage').default);
+          cb(null, require('./modules/Activity/pages/ActivityListPage/ActivityListPage').default);
         });
       }}
     />
@@ -66,3 +66,31 @@ export default (
 //       path="/activityy"
 //       component={Activity}
 //     />
+
+// export default (
+//   <Route path="/" component={App}>
+//     <IndexRoute
+//       getComponent={(nextState, cb) => {
+//         require.ensure([], require => {
+//           cb(null, require('./modules/Post/pages/PostListPage/PostListPage').default);
+//         });
+//       }}
+//     />
+//     <Route
+//       path="/posts/:slug-:cuid"
+//       getComponent={(nextState, cb) => {
+//         require.ensure([], require => {
+//           cb(null, require('./modules/Post/pages/PostDetailPage/PostDetailPage').default);
+//         });
+//       }}
+//     />
+//     <Route
+//       path="/activity"
+//       getComponent={(nextState, cb) => {
+//         require.ensure([], require => {
+//           cb(null, require('./modules/Activity/pages/ActivityListPage/ActivityListPage').default);
+//         });
+//       }}
+//     />
+//   </Route>
+// );
