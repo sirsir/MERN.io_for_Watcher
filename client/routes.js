@@ -42,10 +42,10 @@ export default (
       }}
     />
     <Route
-      path="/activity"
+      path="/post"
       getComponent={(nextState, cb) => {
         require.ensure([], require => {
-          cb(null, require('./modules/Activity/pages/ActivityListPage/ActivityListPage').default);
+          cb(null, require('./modules/Post/pages/PostListPage/PostListPage').default);
         });
       }}
     />

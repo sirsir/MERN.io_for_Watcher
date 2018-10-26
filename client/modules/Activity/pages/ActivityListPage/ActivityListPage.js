@@ -56,7 +56,15 @@ class ActivityListPage extends Component {
 
   handleClickSearch = e => {
       // let user = e.target.value;
-      this.props.dispatch(fetchActivities(this.props.selectUser,this.props.selectStartDate,this.props.selectEndDate));
+      // console.log(this.refs.checkbox_onlyStrange.checked)
+      this.props.dispatch(
+        fetchActivities(
+          this.props.selectUser,
+          this.props.selectStartDate,
+          this.props.selectEndDate,
+          this.refs.checkbox_onlyStrange.checked
+        )
+      );
     
   };
 
@@ -98,22 +106,23 @@ class ActivityListPage extends Component {
         <DateRange 
           onChange={e=>{this.handleSelectDateRange(e)}}
         />
+        <div className="checkbox">
+            <label>
+                <input type="checkbox" ref="checkbox_onlyStrange" /> ONLY Strange Website
+            </label>
+        </div>
         <button className='btn btn-primary btn-block' onClick={(e)=>this.handleClickSearch(e)}>
           Load <i className='fa fa-search'/>
         </button>
         
         <br/>
         <br/>
-          {
-            this.props.activityView === 'normal'?
-              <button className='btn btn-success' onClick={(e)=>this.handleChangeActivityView("summary")}>
-                Summary <i className='fa fa-list-alt'/>
-              </button>
-              :
-              <button className='btn btn-info' onClick={(e)=>this.handleChangeActivityView("normal")}>
-                Raw Data <i className='fa fa-chevron-circle-down'/>
-              </button>               
-          }                     
+        <button className={'btn btn-success' +(this.props.activityView === 'normal'?' disabled':'') } onClick={(e)=>this.handleChangeActivityView("summary")}>
+          Summary <i className='fa fa-list-alt'/>
+        </button>
+        <button className={'btn btn-info' +(this.props.activityView === 'normal'?'':' disabled') } onClick={(e)=>this.handleChangeActivityView("normal")}>
+          Raw Data <i className='fa fa-chevron-circle-down'/>
+        </button>                            
           {activities}        
       </div>
     );
@@ -127,6 +136,16 @@ class ActivityListPage extends Component {
   //     </div>
   //   );
   // }
+  // {
+  //           this.props.activityView === 'normal'?
+  //             <button className='btn btn-success' onClick={(e)=>this.handleChangeActivityView("summary")}>
+  //               Summary <i className='fa fa-list-alt'/>
+  //             </button>
+  //             :
+  //             <button className='btn btn-info' onClick={(e)=>this.handleChangeActivityView("normal")}>
+  //               Raw Data <i className='fa fa-chevron-circle-down'/>
+  //             </button>               
+  //         }      
 }
 
 // Actions required to provide data for this component to render in sever side.

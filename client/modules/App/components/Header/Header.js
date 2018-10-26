@@ -23,7 +23,7 @@ export function Header(props, context) {
           <Link to="/" ><FormattedMessage id="siteTitle" /></Link>
         </h1>
         {
-          context.router.isActive('/', true)
+          context.router.isActive('/post', true)
             ? <a className={styles['add-post-button']} href="#" onClick={props.toggleAddPost}><FormattedMessage id="addPost" /></a>
             : null
         }

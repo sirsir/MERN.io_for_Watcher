@@ -1,6 +1,7 @@
 import UserActivity from '../models/userActivity';
 
 import MacAddress from '../models/macAddress';
+import windowTitle from '../models/windowTitle';
 
 
 import cuid from 'cuid';
@@ -16,6 +17,8 @@ import Sugar from 'sugar'
 // var MAC_ALIAS_MAPPING = {}
 
 const userActivityFn = {
+  window_titles: [],
+
   requestPara2Objects: function(strIn){
     let objOut = {}
 
@@ -41,13 +44,7 @@ const userActivityFn = {
 
       switch(true) {
         case /^#LoginName=/.test(line):
-            objOut["login"] = line.replace(/^#LoginName=*/,"")
-
-            // user = User.select(:id).where({login: mapped_result[:login]}).first
-            // unless user.nil?
-            //   mapped_result[:user_id] = user.id
-            // end
-          
+            objOut["login"] = line.replace(/^#LoginName=*/,"")          
             break;
         case /^#MacAddress=/.test(line):
             objOut["mac_addr"] = line.replace(/^#MacAddress=*/,"")
@@ -98,14 +95,11 @@ const userActivityFn = {
         "mac_addr": objOut["mac_addr"] || "",
         "proc_exec_name": act[4] || ""
       }
-
       objOuts.push(activity)
-
     })
 
     return objOuts
   },
-
   
   mapping_Mac_Alias: {},
 
@@ -117,30 +111,50 @@ const userActivityFn = {
         return
       }
 
-      // console.log(macAddresses)
-
       macAddresses.forEach(
         pair => {
           let objPair = pair.toObject()
-
-          // console.log(objPair)
           
           objOut[objPair.mac] = objPair.alias
         }
       )
+
+      userActivityFn.mapping_Mac_Alias = objOut
+
     });
 
+  },
 
-    // console.log(objOut)
-    return objOut
+  get_WINDOW_TITLES: function(){
+    let objOut = {}
+    windowTitle.find().exec((err, windowTitle) => {
+      if (err) {
+        console.log('Can NOT get_WINDOW_TITLES')
+        return
+      }
+
+      windowTitle.forEach(
+        pair => {
+          let objPair = pair.toObject()
+          objOut[objPair.title] = objPair.category
+        }
+      )
+
+      objOut = Object.keys(objOut).map(
+        key => ({
+          window_title: { $not: new RegExp(key,"i") }
+        })
+      )
+
+      userActivityFn.window_titles = objOut
+    });
   },
 
   getAlias: function(act){
     if (Object.keys(userActivityFn.mapping_Mac_Alias).length === 0){
-      userActivityFn.mapping_Mac_Alias = userActivityFn.get_MAC_ALIAS_MAPPING()
+      userActivityFn.get_MAC_ALIAS_MAPPING()
     }
     
-
     if (userActivityFn.mapping_Mac_Alias[act.mac_addr]){
       return userActivityFn.mapping_Mac_Alias[act.mac_addr]
     }
@@ -153,7 +167,8 @@ const userActivityFn = {
 
 }
 
-
+userActivityFn.get_WINDOW_TITLES()
+userActivityFn.get_MAC_ALIAS_MAPPING()
 
 // export function show(req, res) {
 //   UserActivity.find().exec((err, items) => {
@@ -228,9 +243,9 @@ export function getActivity(req, res) {
   if ( (typeof(req.query.login) !== 'undefined') && (req.query.login !== 'all users') ){
     query = {login:req.query.login}
   }else if ( (typeof(req.query.alias) !== 'undefined') && (req.query.alias !== 'all users') ){
-    if (Object.keys(userActivityFn.mapping_Mac_Alias).length === 0){
-      userActivityFn.mapping_Mac_Alias = userActivityFn.get_MAC_ALIAS_MAPPING()
-    }
+    // if (Object.keys(userActivityFn.mapping_Mac_Alias).length === 0){
+      userActivityFn.get_MAC_ALIAS_MAPPING()
+    // }
 
     let mac = ""
     Object.keys(userActivityFn.mapping_Mac_Alias).forEach(
@@ -244,8 +259,7 @@ export function getActivity(req, res) {
 
     if (mac !== ""){
       query = {mac_addr: mac}
-    }
-    
+    }    
   }
 
 
@@ -258,8 +272,20 @@ export function getActivity(req, res) {
     query_time = {...query_time, $lte: req.query.endDate}
   }
 
+  if (req.query.onlyStrange && req.query.onlyStrange === 'true'){
+    query = { 
+      $and: [ ...userActivityFn.window_titles, query]
+    }
+    console.log(query)
+  }
+
   if (Object.keys(query_time).length > 0){
-    query = { ...query, start_time: query_time}
+    if (query['$and']){
+      query['$and'].push({start_time: query_time})
+    }else{
+      query = { ...query, start_time: query_time}
+    }
+    
   }
 
   // SET SORT METHOD
@@ -277,7 +303,8 @@ export function getActivity(req, res) {
         let actOut = act.toObject()
         if (actOut.start_time){
           // activities[idx].start_time = Sugar.Date.format(new Date(act.start_time), '{hh}:{mm}')
-          let dt = Sugar.Date.format(new Date(act.start_time), '%c')
+          //let dt = Sugar.Date.format(new Date(act.start_time), '%c')
+          let dt = Sugar.Date.format(new Date(act.start_time), '%F %T')
           // activities[idx].start_time = dt
           actOut.start_time = dt
 
@@ -312,9 +339,9 @@ export function getDistinct(req, res) {
 
   switch (field){
     case 'alias':
-      if (Object.keys(userActivityFn.mapping_Mac_Alias).length === 0){
-        userActivityFn.mapping_Mac_Alias = userActivityFn.get_MAC_ALIAS_MAPPING()
-      }
+      // if (Object.keys(userActivityFn.mapping_Mac_Alias).length === 0){
+        userActivityFn.get_MAC_ALIAS_MAPPING()
+      // }
 
       // let arrOut = Object.values( userActivityFn.mapping_Mac_Alias )
       let arrOut = Object.keys(userActivityFn.mapping_Mac_Alias).map((key) => userActivityFn.mapping_Mac_Alias[key] )

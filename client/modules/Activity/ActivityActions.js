@@ -39,7 +39,7 @@ export function addActivities(activities) {
 
 
 
-export function fetchActivities(user,startDate,endDate) {
+export function fetchActivities(user, startDate, endDate, onlyStrange) {
   return (dispatch) => {
     // return callApi('activities').then(res => {
       // let body = {}
@@ -54,7 +54,7 @@ export function fetchActivities(user,startDate,endDate) {
 
       let apiUrl = 'user_activity'
 
-      if (typeof(user)!=='undefined'||typeof(startDate)!=='undefined'||typeof(endDate)!=='undefined'){
+      if (typeof(user)!=='undefined'||typeof(startDate)!=='undefined'||typeof(endDate)!=='undefined'||typeof(onlyStrange)!=='undefined'){
         apiUrl += '?'
 
         // if (typeof(user)!=='undefined'){
@@ -70,10 +70,15 @@ export function fetchActivities(user,startDate,endDate) {
         }
 
         if (typeof(endDate)!=='undefined'){
-          apiUrl += 'endDate='+endDate
+          apiUrl += 'endDate='+endDate +'&'
+        }
+
+        if (typeof(onlyStrange)!=='undefined'){
+          apiUrl += 'onlyStrange='+onlyStrange +'&'
         }
 
         apiUrl = apiUrl.replace(/\?$/, '')
+        apiUrl = apiUrl.replace(/\&$/, '')
       }
       
 
